@@ -13,11 +13,50 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils.decorators import method_decorator
+from django.db.models.functions import Concat
+from django.db.models import F, Value
+from django.db import models
+
 
 from .models import User
-from .models import Admin, Recipe
+from .models import Admin, Recipe, Conversation
 import json
 import uuid
+import requests
+
+from django.shortcuts import HttpResponse, render
+# import requests
+
+
+# Create your views here.
+def home(request):
+    context = {'name': 'Web Weavers', 'course' : 'Web Systems'} 
+    return render(request,'home.html',context)
+def about(request):
+    return render(request,'about.html')
+#def projects(request):
+    #return render(request,'projects.html')
+def contact(request):
+    return render(request,'contact.html')
+#def view_recipe(request):
+    #api_url = "https://api.example.com/data"
+    
+    # Make a request to the API
+    #response = requests.get(api_url)
+    
+    # Check if the request was successful
+    #if response.status_code == 200:
+    #    data = response.json()
+    #else:
+    #    data = []
+
+    #return render(request, 'view_recipe.html', {'api_data': data})
+def view_recipe(request):
+    return render(request,'view_recipe.html')
+def user_page(request):
+    return render(request,'user_page.html')
+def analytics(request):
+    return render(request,'analytics.html')
 
 @method_decorator(csrf_exempt, name='dispatch')
 class SignupView(View):
@@ -314,4 +353,65 @@ class SaveRecipeView(View):
             return JsonResponse({'message': 'Recipe saved to favorites successfully'}, status=201)
         else:
             return JsonResponse({'error': 'Recipe already in favorites'}, status=400)
+        
+@method_decorator(csrf_exempt, name='dispatch')
+class GenerateChatResponseView(View):
+    def post(self, request):
+        data = json.loads(request.body.decode('utf-8'))
 
+        user_id = data.get('userId')
+
+        api_key = ''
+
+        conversation = data.get('conversation', [])
+
+        existing_history = self.fetch_history(user_id)
+
+        print("exisitng history........\n\n", existing_history)
+
+        response = self.openai_chat_request(conversation, api_key)
+
+        assistant_reply = response['choices'][0]['message']['content']
+
+        self.save_history(user_id, assistant_reply)
+
+        return JsonResponse({'assistant_reply': assistant_reply})
+
+    def openai_chat_request(self, conversation, api_key):
+        api_url = 'https://api.openai.com/v1/chat/completions'
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {api_key}',
+        }
+
+        messages =[]
+
+        messages.append({"role": "system", "content" :"You are a helpful assistant specializing in providing personalized cooking recipes. The user will provide specific ingredients along with their dietary preferences and meal preferences. Based on this information, you are tasked with recommending delicious recipes tailored to the user's preferences. For example, the user might say: What's a healthy recipe for dinner with chicken, broccoli, and quinoa? I prefer gluten-free options. Your responses should take into account the provided ingredients, the user's dietary preferences (such as gluten-free), and their meal preferences (e.g., dinner). Feel free to ask for clarification or additional details to ensure the recipes align perfectly with the user's needs." })
+
+
+        for conv in conversation:
+            messages.append(conv)
+
+
+        data = {
+            'messages': messages,
+            'model':'gpt-3.5-turbo-16k-0613'
+        }
+
+        response = requests.post(api_url, headers=headers, json=data)
+
+        # print("response from openAI", response.status_code, response.json())
+
+        return response.json()
+    def fetch_history(self, user_id):
+        # Fetch existing conversation history for the user
+        existing_conversation, created = Conversation.objects.get_or_create(userId=user_id)
+        print("exisiting conversation messages...........\n", existing_conversation)
+        return existing_conversation.messages
+    
+    def save_history(self, user_id, updated_history):
+        # Save the updated conversation history
+        Conversation.objects.filter(userId=user_id).update(
+            messages=Concat(F('messages'), Value([updated_history]), output_field=models.JSONField())
+        )

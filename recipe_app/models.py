@@ -27,3 +27,8 @@ class Recipe(models.Model):
     steps = models.JSONField(default=list)
     created_at = models.DateTimeField(auto_now_add=True)
 
+class Conversation(models.Model):
+    conversation_id = models.CharField(max_length=255)
+    userId = models.CharField(max_length=100, unique=True)
+    messages = models.JSONField(default=list)
+
