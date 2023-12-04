@@ -1,72 +1,131 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>About</title>
+    <title>About Us</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-  </head>
-  <body>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff;
+        }
+
+        .welcome-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .team-member {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .team-member h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-member p {
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-member:hover {
+            transform: scale(1.05);
+        }
+
+        .about-content {
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="/">Recipe Bot</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="/">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/about">About</a>
-              </li>
-              
-              <li class="nav-item">
-                <a class="nav-link" href="/contact">Contact</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/view_recipe">Recipes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/user_page">Profile</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/analytics">Analytics</a>
-            </li>
-            </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-          </div>
-        </div>
-      </nav>
-      <div class="container">
-        <h2 class="text-center my-3">About us</h2>
-          <h3>We are Web Weavers. Our Team Members are:</h3>
-          <div class="col-md-10">
-            <div class="col-md-2">
-                <p>Ananya </p>
-            </div>
-            <div class="col-md-2">
-                <p>Pratulyan </p>
-            </div>
-            <div class="col-md-2">
-                <p>Deeptha </p>
-            </div>
-            <div class="col-md-2">
-                <p>Swathi</p>
-            </div>
-            <div class="col-md-2">
-                <p>Rashil</p>
+            <a class="navbar-brand" href="/">Recipe Bot</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/view_recipe">Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user_page">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/analytics">Analytics</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
             </div>
         </div>
-        <h3>We are here to present our project RecipeBot.</h3>
-        <h3>An application that provides a recipe with just the ingredients available in front of us and not require anything else.
-        </h3>
+    </nav>
 
-      </div
+    <div class="container">
+        <div class="welcome-section">
+            <h2 class="my-3">Welcome to RecipeBot!</h2>
+            <p>Discover a world of flavors tailored to your ingredients. Whether you're a culinary whiz or just starting, RecipeBot is your guide to tasty creations.</p>
+            <p>Unleash your inner chef, explore our recipes, and turn every meal into a delightful experience. Happy cooking!</p>
+        </div>
+
+        <h2 class="text-center my-4">Meet Our Team</h2>
+
+        <div class="row justify-content-around">
+            <div class="col-md-4 team-member">
+                <h3>Ananya</h3>
+                <p>Passionate about creating delightful recipes with a touch of creativity.</p>
+            </div>
+            <div class="col-md-4 team-member">
+                <h3>Prathulyan</h3>
+                <p>Food enthusiast and the mastermind behind our innovative recipe suggestions.</p>
+            </div>
+            <div class="col-md-4 team-member">
+                <h3>Deeptha</h3>
+                <p>Bringing a blend of flavors and expertise to every recipe presented.</p>
+            </div>
+        </div>
+
+        <div class="row justify-content-around">
+            <div class="col-md-4 team-member">
+                <h3>Swathi</h3>
+                <p>Specializing in creating recipes that cater to various dietary preferences.</p>
+            </div>
+            <div class="col-md-4 team-member">
+                <h3>Rashil</h3>
+                <p>Bringing a touch of elegance and simplicity to every dish we offer.</p>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-  </body>
+</body>
 </html>

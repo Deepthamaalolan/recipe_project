@@ -15,13 +15,13 @@ urlpatterns = [
     path('user/save_recipe/', SaveRecipeView.as_view(), name='user_save_recipe'),
     path('user/favorites/', GetUserFavoritesView.as_view(), name='get_user_fav'),
     path('generate_chat_response/', GenerateChatResponseView.as_view(), name='generate_chat_response'),
-    path('home/', home, name='home'),
+    path('', home, name='home'),
     path('user_profile/', UserView.as_view(), name = "user_profile"),
-    path('view_recipe/', GetRecipeView.as_view(), name = "view_recipe"),
+    path('admin/view_recipe/', GetRecipeView.as_view(), name = "view_recipe"),
     path('about/', about, name='about'),
     #path('projects', views.projects, name='projects'),
     path('contact/', contact, name='contact'),
-    path('view_recipe', view_recipe, name='view_recipe'),
+    path('view_recipe/', view_recipe, name='view_recipe'),
     path('user_page/', user_page, name='user_page'),
     path('analytics/', analytics, name='analytics')
 ]
