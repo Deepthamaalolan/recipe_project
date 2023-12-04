@@ -10,6 +10,8 @@ class User(models.Model):
     dietary_preferences = models.JSONField(default=list)
     meal_preferences = models.JSONField(default=list)
     favorites = models.JSONField(default=list)
+    def __str__(self):
+        return self.username
 
 class Admin(models.Model):
     admin_id = models.CharField(max_length=100, unique=True)
