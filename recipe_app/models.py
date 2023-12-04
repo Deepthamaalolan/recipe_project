@@ -8,6 +8,7 @@ class User(models.Model):
     password = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
+<<<<<<< HEAD
     dietary_preferences = models.CharField(max_length=255)
     meal_preferences = models.CharField(max_length=255)
     favorites = models.CharField(max_length=255)
@@ -29,6 +30,13 @@ class User(models.Model):
     #         self.meal_preferences = json.loads(self.meal_preferences)
     #     if self.favorites:
     #         self.favorites = json.loads(self.favorites)
+=======
+    dietary_preferences = models.JSONField(default=list)
+    meal_preferences = models.JSONField(default=list)
+    favorites = models.JSONField(default=list)
+    def __str__(self):
+        return self.username
+>>>>>>> 6a5c16d (Hideeps)
 
 class Admin(models.Model):
     admin_id = models.CharField(max_length=100, unique=True)

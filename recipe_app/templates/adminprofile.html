@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal</title>
+    <!-- Include necessary libraries for charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        header img {
+            max-width: 100px; /* Adjust the size of the logo as needed */
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #pieChart {
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        #trendingRecipes {
+            margin: 20px 0;
+        }
+
+        .recipe {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        #addRecipeBtn {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header with Logo -->
+        <header>
+            <img src="web_weavers_logo.png" alt="Web Weavers Logo">
+        </header>
+
+        <h1>Admin Portal</h1>
+
+        <!-- Pie Chart for Analytics -->
+        <div id="pieChart">
+            <canvas id="analyticsChart"></canvas>
+        </div>
+
+        <!-- Display Trending Recipes -->
+        <div id="trendingRecipes">
+            <h2>Trending Recipes</h2>
+            <div class="recipe">Recipe 1</div>
+            <div class="recipe">Recipe 2</div>
+            <div class="recipe">Recipe 3</div>
+            <!-- Add more recipes dynamically based on data -->
+        </div>
+
+        <!-- Button to Add New Recipes -->
+        <button id="addRecipeBtn">Add New Recipe</button>
+    </div>
+
+    <script>
+        // Add JavaScript logic for initializing and updating the pie chart
+        // This can involve fetching data from the server and updating the chart accordingly
+        var ctx = document.getElementById('analyticsChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Category A', 'Category B', 'Category C'],
+                datasets: [{
+                    data: [30, 40, 30],
+                    backgroundColor: ['#ff6384', '#36a2eb', '#ffce56']
+                }]
+            }
+        });
+    </script>
+</body>
+
+</html>
