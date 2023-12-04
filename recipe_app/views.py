@@ -66,7 +66,6 @@ class UserView(View):
         # print("data",data)
         data = json.loads(request.body.decode('utf-8'))
         user_id = data.get('user_id')
-        print("user_id.........", user_id)
 
         if not user_id:
             return JsonResponse({'error': 'User ID not provided'}, status=400)
@@ -328,15 +327,17 @@ class UpdateRecipeView(View):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class GetUserFavoritesView(View):
-    def get(self, request):
+    def post(self, request):
         data = json.loads(request.body.decode('utf-8'))
-
+        print("data of the user", data)
         user_id = data.get('userId')
 
         if not user_id:
             return JsonResponse({'error': 'User ID not provided in headers'}, status=400)
 
         user = User.objects.filter(userId=str(user_id)).first()
+
+        print("user found or not", user)
 
         if not user:
             return JsonResponse({'error': 'User not found'}, status=404)
@@ -345,7 +346,8 @@ class GetUserFavoritesView(View):
             favorites = user.favorites
 
             if favorites:
-                return JsonResponse({'favorites': favorites}, status=200)
+                return JsonResponse({"fav":favorites})
+                # return JsonResponse({'favorites': favorites}, status=200)
             else:
                 return JsonResponse({'message': 'User has not made any recipe favorite'}, status=200)@method_decorator(csrf_exempt, name='dispatch')
 
