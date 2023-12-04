@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 # recipe_app/views.py
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -59,9 +59,42 @@ def analytics(request):
     return render(request,'analytics.html')
 
 @method_decorator(csrf_exempt, name='dispatch')
+class UserView(View):
+    def post(self, request):
+      
+        # data = json.loads(request.body.decode('utf-8'))
+        # print("data",data)
+        data = json.loads(request.body.decode('utf-8'))
+        user_id = data.get('user_id')
+        print("user_id.........", user_id)
+
+        if not user_id:
+            return JsonResponse({'error': 'User ID not provided'}, status=400)
+
+        user = get_object_or_404(User, userId=user_id)
+
+        print("user.......\n\n", user)
+
+        user_details = {
+            'userId': user.userId,
+            'username': user.username,
+            'email': user.email,
+            'phone_number': user.phone_number,
+            'dietary_preferences': user.dietary_preferences,
+            'meal_preferences': user.meal_preferences,
+            'favorites': user.favorites,
+        }
+
+        return JsonResponse(user_details)
+
+@method_decorator(csrf_exempt, name='dispatch')
 class SignupView(View):
     def post(self, request):
-        data = json.loads(request.body.decode('utf-8'))
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+        except json.JSONDecodeError:
+            return self.json_response({'error': 'Invalid JSON data'}, status=400)
+
         username = data.get('username')
         password = data.get('password')
         email = data.get('email')
@@ -73,20 +106,15 @@ class SignupView(View):
         if not username or not password or not email:
             return self.json_response({'error': 'Username, password, and email are required'}, status=400)
 
-        all_users = User.objects.all()
-
-        # Print users to the console
-        for user in all_users:
-            print(f'Username: {user.username}, Email: {user.email}')
-
-        existing_user = User.objects.filter(username=username) or User.objects.filter(email=email)
+        # Use get() to check for existing user
+        existing_user = User.objects.filter(username=username).first() or User.objects.filter(email=email).first()
         if existing_user:
             return self.json_response({'error': 'Username or email already exists'}, status=400)
 
         hashed_password = make_password(password)
         user_id = str(uuid.uuid4())
 
-        new_user = User.objects.create(
+        new_user = User(
             userId=user_id,
             username=username,
             password=hashed_password,
@@ -96,6 +124,8 @@ class SignupView(View):
             meal_preferences=meal_preferences,
             favorites=favorites
         )
+
+        new_user.save()
 
         return self.json_response({'message': 'User created successfully'}, status=201)
 
@@ -317,8 +347,32 @@ class GetUserFavoritesView(View):
             if favorites:
                 return JsonResponse({'favorites': favorites}, status=200)
             else:
-                return JsonResponse({'message': 'User has not made any recipe favorite'}, status=200)
+                return JsonResponse({'message': 'User has not made any recipe favorite'}, status=200)@method_decorator(csrf_exempt, name='dispatch')
 
+@method_decorator(csrf_exempt, name='dispatch')
+class GetRecipeView(View):
+    def get(self, request):
+        try:
+            # Fetch the first 5 recipes from the Recipe model
+            recipes = Recipe.objects.all()[:5]
+
+            # Serialize the recipes
+            serialized_recipes = []
+            for recipe in recipes:
+                serialized_recipes.append({
+                    "dishName": recipe.dishName,
+                    "ingredients": recipe.ingredients,
+                    "steps": recipe.steps,
+                    "created_at": recipe.created_at
+                })
+
+            # Return the serialized recipes in JSON format
+            return JsonResponse({'recipes': serialized_recipes}, status=200)
+
+        except Exception as e:
+            # Handle exceptions or errors as needed
+            return JsonResponse({'error': str(e)}, status=500)
+    
 @method_decorator(csrf_exempt, name='dispatch')
 class SaveRecipeView(View):
     def post(self, request):

@@ -1,68 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-GL18OOtXRzy0yJLlM1MyDVPJ2l9uYTts/PAeRO66A1XIjz0FfMKIs+pwg4j4on1P8C4ZZuyXv9DD0vSlBqC4lg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
         }
 
         .container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-        }
-
-        .column {
-            height: 100%;
-        }
-
-        .column.left {
-            flex: 3;
             padding: 20px;
             display: flex;
-            position: relative;            
-            flex-direction: column;
-            align-items: center;  /* Center the content horizontally */
-            justify-content: center;  /* Center the content vertically */
+            justify-content: space-around;
         }
 
-        .column.left h2 {
-            margin-bottom: 20px;  /* Add margin below the heading */
-        }
-
-        .edit-button {
-            margin-top: 20px;
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 15px;
-            border: none;
+        .edit-section,
+        .favorite-recipes {
+            background-color: #fff;
             border-radius: 8px;
-            cursor: pointer;
-            z-index: 1;
-            width: 100px;
-        }
-
-        .column.right {
-            flex: 7;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            background-color: #e0e0e0;
-            position: relative;
+            margin-bottom: 20px;
+            flex: 1;
+            margin-right: 20px;
         }
 
-        /* Profile Section Styles */
-        .profile-section {
+        .edit-section {
             text-align: center;
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin-bottom: 40px;
         }
 
         .profile-picture {
@@ -70,10 +46,12 @@
             height: 150px;
             border-radius: 50%;
             overflow: hidden;
-            margin-bottom: 10px;
+            background-color: #e0e0e0;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .profile-picture img {
@@ -83,231 +61,285 @@
             border-radius: 50%;
         }
 
-        /* Data Section Styles */
-        .data-section {
-            text-align: center;
-            margin-bottom: 20px;
+        .profile-details {
+            margin-top: 20px;
         }
 
-        .data-content { 
-            /* Style your data content as needed */
-            text-align: center;
-            margin-bottom: 20px;
-        } 
-        
-        /* Chatbot Styles */
-       /* #chatButton {
-            position: fixed;
-            bottom: 0;
-            right: 0;
+        h2 {
+            color: #4CAF50;
+        }
+
+        p {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .icon {
+            margin-right: 10px;
+        }
+
+        .edit-button {
             background-color: #4CAF50;
             color: #fff;
-            padding: 15px;
-            width: 200px;
+            padding: 10px 20px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            margin: 0;
-            z-index: 1;
-            text-align: center;
+            font-size: 16px;
         }
 
-        #chatContainer {
-            max-width: 300px;
-            margin: 0;
-            background-color: #fff;
+        .favorite-list {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .favorite-list-item {
+            margin-bottom: 10px;
+            background-color: #e0e0e0;
+            padding: 10px;
+            border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-            position: fixed;
-            bottom: 0px;
-            right: 0px;
-            display: none;
-            z-index: 1;
         }
 
-        .chat-header {
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-            font-size: 18px;
-            cursor: pointer;
+        .bold-green {
+            font-weight: bold;
+            color: #4CAF50;
+            margin-right: 5px;
         }
 
-        .chat-body {
-            padding: 20px;
-            height: 200px;
-            width: 300px;
-            overflow-y: auto;
-        }
+        .edit-form {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.9);
+        justify-content: center;
+        align-items: center;
+        z-index: 2;
+    }
 
-        .chat-input {
-            width: calc(100% - 40px);
-            padding: 5px;
-            margin: 0px 0px 5px 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            outline: none;
-            float: left;
-        }
+    .edit-form form {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        max-width: 400px;
+        margin: auto;
+        position: relative;
+    }
 
-        .send-button {
-            width: 100px;
-            padding: 10px;
-            margin: 0px 10px 10px 0px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            float: right; 
-        }*/
+    .edit-form label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .edit-form select,
+    .edit-form input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .edit-form button {
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .edit-form h3 {
+        text-align: center;
+        color: #4CAF50;
+        margin-bottom: 20px;
+    }
+       
+        
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="/">Recipe Bot</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="/">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/about">About</a>
-              </li>
-              
-              <li class="nav-item">
-                <a class="nav-link" href="/contact">Contact</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link"  href="/view_recipe">Recipes</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/user_page">Profile</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/analytics">Analytics</a>
-              </li>
-            </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-          </div>
+            <a class="navbar-brand" href="/">Recipe Bot</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/view_recipe">Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/user_page">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/analytics">Analytics</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
         </div>
-      </nav>
+    </nav>
     <div class="container">
-        <div class="column left">
-            <h2>My Profile</h2>
-            <div class="profile-section" id="profileSection">
-                <div class="profile-picture" id="profilePicture"></div>
-                <h2 id="username">Username</h2>
-                <p id="email">Email</p>
-                <p id="phoneNumber">Phone Number</p>
-                <p id="dietaryPreferences">Dietary Preferences</p>
-                <p id="mealPreferences">Meal Preferences</p>
-                <p id="favorites">Favorites</p>
-                <button class="edit-button" onclick="toggleEditMode()">Edit</button>
+        <div class="edit-section">
+            <div class="profile-picture" id="profilePicture"></div>
+            <div class="profile-details">
+                <p><span class="bold-green">User Name:</span> <span id="username"></span></p>
+                <p><span class="bold-green">Email:</span> <span id="email"></span></p>
+                <p><span class="bold-green">Phone Number:</span> <span id="phoneNumber"></span></p>
+                <p><span class="bold-green">Dietary Preferences:</span> <span id="dietaryPreferences"></span></p>
+                <p><span class="bold-green">Meal Preferences:</span> <span id="mealPreferences"></span></p>
+                <button class="edit-button" onclick="toggleEditForm()">
+                    <i class="fas fa-edit icon"></i>Edit
+                </button>
             </div>
         </div>
-        <div class="column right">
-            <h2>Favorite Recipes</h2>
-            <div class="data-section" id="dataSection">
-                <h2>Data Section</h2>
-                <div class="data-content" id="dataContent"></div>
-            </div>
-            <!--<div id="chatButton" onclick="toggleChatbot()">Chatbot</div>
-            <div id="chatContainer">
-                <div class="chat-header" onclick="toggleChatbot()">Chatbot</div>
-                <div class="chat-body" id="chatBody">
-                     Chat messages will be appended here dynamically 
-                </div>
-                <div>
-                    <input type="text" id="userInput" class="chat-input" placeholder="Type your message..."></div>
-                    <button onclick="sendMessage()" class="send-button">Send</button>
-                </div>
-            </div> -->
+        <div class="favorite-recipes">
+            <h2><i class="fas fa-star icon"></i> Favorite Recipes</h2>
+            <ul class="favorite-list" id="favoriteList"></ul>
         </div>
+    </div>
+      
+    <div class="edit-form" id="editForm">
+        <form>
+            <h3>Edit Profile</h3>
+
+            <label for="editPhoneNumber">Phone Number:</label>
+            <input type="text" id="editPhoneNumber" name="editPhoneNumber">
+
+            <label for="editDietaryPreferences">Dietary Preferences:</label>
+            <select id="editDietaryPreferences" name="editDietaryPreferences" multiple>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="gluten-free">Gluten-Free</option>
+                <!-- Add more options as needed -->
+            </select>
+
+            <label for="editMealPreferences">Meal Preferences:</label>
+            <select id="editMealPreferences" name="editMealPreferences" multiple>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <!-- Add more options as needed -->
+            </select>
+
+            <button type="button" onclick="saveChanges()">Save Changes</button>
+        </form>
     </div>
 
     <script>
         // Function to fetch user data from the API
         async function fetchUserData() {
             try {
-                const response = await fetch('https://jsonplaceholder.typicode.com/users/1');
+                const userId = '9df3a0b1-75e4-4413-a08e-cae8069d3e6a'; // Replace with the actual user ID
+                const response = await fetch('http://127.0.0.1:8000/api/user_profile/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ user_id: userId }),
+                });
+
                 const userData = await response.json();
+                console.log("user data", userData)
+
+                console.log("Before updating HTML elements");
 
                 // Update profile section with fetched data
                 document.getElementById('profilePicture').innerHTML = `<img src="https://via.placeholder.com/150" alt="Profile Picture">`;
-                document.getElementById('username').textContent = userData.username;
-                document.getElementById('email').textContent = userData.email;
-                document.getElementById('phoneNumber').textContent = userData.phone;
-                document.getElementById('dietaryPreferences').textContent = 'Dietary Preferences: Some preferences'; // Replace with actual data
-                document.getElementById('mealPreferences').textContent = 'Meal Preferences: Some preferences'; // Replace with actual data
-                document.getElementById('favorites').textContent = 'Favorites: Some favorites'; // Replace with actual data
+                document.getElementById('username').innerHTML = `<span class="bold-green"></span> ${userData.username}`;
+                document.getElementById('email').innerHTML = `<span class="bold-green"></span> ${userData.email}`;
+                document.getElementById('phoneNumber').innerHTML = `<span class="bold-green"></span> ${userData.phone_number}`;
+                document.getElementById('dietaryPreferences').innerHTML = `<span class="bold-green"></span> ${userData.dietary_preferences}`;
+                document.getElementById('mealPreferences').innerHTML = `<span class="bold-green"></span> ${userData.meal_preferences}`;
+
+                console.log("After updating HTML elements");
+
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
         }
 
-        // Function to fetch data for the data section from the API
-        async function fetchDataForDataSection() {
+        // Function to fetch data for the favorite recipes section from the API
+        async function fetchFavoriteRecipes() {
             try {
                 const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-                const data = await response.json();
+                const favoriteRecipes = await response.json();
 
-                // Update data section with fetched data
-                const dataContent = document.getElementById('dataContent');
-                data.forEach(item => {
-                    const dataItem = document.createElement('div');
-                    dataItem.textContent = item.title;
-                    dataContent.appendChild(dataItem);
+                // Update favorite recipes section with fetched data
+                const favoriteList = document.getElementById('favoriteList');
+                favoriteRecipes.slice(0, 5).forEach(recipe => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('favorite-list-item');
+                    listItem.textContent = recipe.title;
+                    favoriteList.appendChild(listItem);
                 });
             } catch (error) {
-                console.error('Error fetching data for data section:', error);
+                console.error('Error fetching favorite recipes:', error);
             }
         }
 
-        // Fetch user data and data for the data section when the page loads
+        // Fetch user data and favorite recipes when the page loads
         window.onload = function () {
             fetchUserData();
-            fetchDataForDataSection();
+            fetchFavoriteRecipes();
         };
 
-        // Toggle edit mode for profile information
-        function toggleEditMode() {
-            // Replace the following logic with your own edit mode implementation
-            alert('Edit mode is toggled. Implement your edit logic here.');
+        function toggleEditForm() {
+        // Toggle visibility of the edit form
+        const editForm = document.getElementById('editForm');
+        editForm.style.display = editForm.style.display === 'none' ? 'flex' : 'none';
+
+        // Fetch the existing user data and pre-fill the edit form fields
+        const phoneNumber = document.getElementById('phoneNumber').innerText.trim();
+        document.getElementById('editPhoneNumber').value = phoneNumber;
+
+        const dietaryPreferences = document.getElementById('dietaryPreferences').innerText.trim().split(', ');
+        const editDietaryPreferences = document.getElementById('editDietaryPreferences');
+        for (const option of editDietaryPreferences.options) {
+            option.selected = dietaryPreferences.includes(option.value);
         }
 
-        //function sendMessage() {
-        //  var userInput = document.getElementById('userInput').value;
-        //  var chatBody = document.getElementById('chatBody');
+        const mealPreferences = document.getElementById('mealPreferences').innerText.trim().split(', ');
+        const editMealPreferences = document.getElementById('editMealPreferences');
+        for (const option of editMealPreferences.options) {
+            option.selected = mealPreferences.includes(option.value);
+        }
+    }
 
-            // Append user message to the chat
-        //  chatBody.innerHTML += '<div class="user-message">' + userInput + '</div>';
-
-            // Simulate a simple bot response (you can replace this with actual logic)
-        //   var botResponse = 'Bot: Thanks for your message!';
-
-            // Append bot message to the chat after a short delay
-        //  setTimeout(function() {
-        //     chatBody.innerHTML += '<div class="bot-message">' + botResponse + '</div>';
-        //    }, 500);
-
-            // Clear the user input field
-        //    document.getElementById('userInput').value = '';
-        // }
-
-        //function toggleChatbot() {
-        //    var chatContainer = document.getElementById('chatContainer');
-        //    chatContainer.style.display = (chatContainer.style.display === 'none' || chatContainer.style.display === '') ? 'block' : 'none';
-        // }
+    function saveChanges() {
+        // Implement the logic to save changes to the server here
+        // You can retrieve the edited values from the edit form fields
+        // and send them to the server using an appropriate API request.
+        // Once the changes are saved, update the displayed user data.
+        alert('Changes saved successfully!');
+        
+        // Close the edit form and go back to the previous page (for demo purposes, it's just hiding the form)
+        const editForm = document.getElementById('editForm');
+        editForm.style.display = 'none';
+    }
     </script>
 </body>
+
 </html>

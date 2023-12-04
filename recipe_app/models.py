@@ -1,15 +1,33 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
+import json
 
 class User(models.Model):
-    userId = models.CharField(max_length=100, unique=True)  # Assuming 36 is the length of your UUID strings
-    username = models.CharField(max_length=255)
+    userId = models.CharField(max_length=100, unique=True)
     username = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
-    dietary_preferences = models.JSONField(default=list)
-    meal_preferences = models.JSONField(default=list)
-    favorites = models.JSONField(default=list)
+    dietary_preferences = ArrayField(models.CharField(max_length=255), default=list)
+    meal_preferences = ArrayField(models.CharField(max_length=255), default=list)
+    favorites = ArrayField(models.CharField(max_length=255), default=list)
+
+    def save(self, *args, **kwargs):
+        # Call the original save method to save the user
+        super().save(*args, **kwargs)
+
+        # Convert lists to strings before saving to MongoDB
+        self.dietary_preferences = json.dumps(self.dietary_preferences)
+        self.meal_preferences = json.dumps(self.meal_preferences)
+        self.favorites = json.dumps(self.favorites)
+
+        # Convert strings back to lists after saving
+        if self.dietary_preferences:
+            self.dietary_preferences = json.loads(self.dietary_preferences)
+        if self.meal_preferences:
+            self.meal_preferences = json.loads(self.meal_preferences)
+        if self.favorites:
+            self.favorites = json.loads(self.favorites)
 
 class Admin(models.Model):
     admin_id = models.CharField(max_length=100, unique=True)
