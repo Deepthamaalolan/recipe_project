@@ -1,0 +1,132 @@
+<!-- myapp/templates/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        p {
+            color: #f00;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .error-message {
+            color: #f00;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="loginForm" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <h2>Login</h2>
+        <div id="errorMessage" class="error-message"></div>
+        <input type="text" name="username" id="usernameInput" placeholder="Username">
+        <input type="password" name="password" id="passwordInput" placeholder="Password">
+        <input type="submit" value="Login">
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.getElementById('loginForm');
+
+            loginForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                const username = document.getElementById('usernameInput').value;
+                const password = document.getElementById('passwordInput').value;
+                const errorMessageElement = document.getElementById('errorMessage');
+
+                // Call the API to check credentials
+                fetch('http://127.0.0.1:8000/user/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                    }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    user_id = response.user_id
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Login successful:', data);
+
+                    // Log the entire data object to the console
+
+                    // Retrieve userId from the response data
+                    var userId = data.userId;
+
+                    if(data.isadmin){
+                        window.location.href="/admin_profile";
+                    }else{
+
+                        // Redirect to profile page with the userId in the URL
+                        window.location.href = '/user_page?userId=' + userId;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during signup:', error);
+                    errorMessageElement.textContent = error;
+                    // Handle error (e.g., display an error message)
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

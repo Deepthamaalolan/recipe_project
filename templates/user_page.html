@@ -22,7 +22,9 @@
         .container {
             padding: 20px;
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap; /* Allow containers to wrap to the next line on smaller screens */
         }
 
         .edit-section,
@@ -39,6 +41,18 @@
         .edit-section {
             text-align: center;
             margin-bottom: 40px;
+        }
+
+        .edit-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
         }
 
         .profile-picture {
@@ -109,67 +123,122 @@
             margin-right: 5px;
         }
 
-        .edit-form {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(255, 255, 255, 0.9);
-        justify-content: center;
-        align-items: center;
-        z-index: 2;
-    }
+        .edit-form form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            max-width: 400px;
+            margin: auto;
+            position: relative;
+        }
 
-    .edit-form form {
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        padding: 20px;
-        max-width: 400px;
-        margin: auto;
+        .edit-form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .edit-form select,
+        .edit-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .edit-form button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .edit-form h3 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        .form-container {
+            width: 300px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+        }
+
+        button#save-button {
+       		background-color: #4CAF50; /* Green color */
+        	color: #fff;
+        	padding: 10px 20px;
+        	border: none;
+        	cursor: pointer;
+        	display: block; /* Center the button */
+        	margin: 0 auto; /* Center horizontally */
+   		}
+
+           .custom-dropdown {
         position: relative;
     }
 
-    .edit-form label {
-        display: block;
-        margin-bottom: 10px;
+    .dropdown {
+        display: inline-block;
+        position: relative;
     }
 
-    .edit-form select,
-    .edit-form input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-sizing: border-box;
-    }
-
-    .edit-form button {
-        background-color: #4CAF50;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 8px;
+    .selected-options {
         cursor: pointer;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 200px;
+        display: flex;
+        justify-content: space-between;
     }
 
-    .edit-form h3 {
-        text-align: center;
-        color: #4CAF50;
-        margin-bottom: 20px;
+    .options {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 200px;
+        z-index: 1;
     }
-       
-        
+
+    .option {
+        padding: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .option:hover {
+        background-color: #f0f0f0;
+    }
     </style>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">Recipe Bot</a>
+            <a class="navbar-brand" href="/">Recipe Wiz</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -192,14 +261,7 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/user_page">Profile</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/analytics">Analytics</a>
-                    </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
             </div>
         </div>
     </nav>
@@ -222,43 +284,76 @@
             <ul class="favorite-list" id="favoriteList"></ul>
         </div>
     </div>
-      
     <div class="edit-form" id="editForm">
-        <form>
-            <h3>Edit Profile</h3>
+        <form class="p-4" id="profile-form">
+            <h2 class="mb-4 text-center">Edit Profile</h2>
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
+            
+            <div class="form-group custom-dropdown">
+                <label for="diet-plans">Diet Plans (Select multiple):</label>
+                <div class="dropdown">
+                    <div class="selected-options" onclick="toggleDropdown('dietPlans')">
+                        <span id="selectedDietPlans">Select Diet Plans</span>
+                        <i class="fas fa-caret-down"></i>
+                    </div>
+                    <div class="options" id="dietPlansOptions">
+                        <div class="option" onclick="toggleOption('Low Carb', 'selectedDietPlans', 'selectedDietPlansInput')">Low Carb</div>
+                        <div class="option" onclick="toggleOption('Keto', 'selectedDietPlans', 'selectedDietPlansInput')">Keto</div>
+                        <div class="option" onclick="toggleOption('Paleo', 'selectedDietPlans', 'selectedDietPlansInput')">Paleo</div>
+                        <div class="option" onclick="toggleOption('Mediterranean', 'selectedDietPlans', 'selectedDietPlansInput')">Mediterranean</div>
+                        <div class="option" onclick="toggleOption('Vegan', 'selectedDietPlans', 'selectedDietPlansInput')">Vegan</div>
+                        <div class="option" onclick="toggleOption('Atkins', 'selectedDietPlans', 'selectedDietPlansInput')">Atkins</div>
+                        <div class="option" onclick="toggleOption('Zone Diet', 'selectedDietPlans', 'selectedDietPlansInput')">Zone Diet</div>
+                        <div class="option" onclick="toggleOption('Intermittent Fasting', 'selectedDietPlans', 'selectedDietPlansInput')">Intermittent Fasting</div>
+                        <div class="option" onclick="toggleOption('DASH Diet', 'selectedDietPlans', 'selectedDietPlansInput')">DASH Diet</div>
+                        <div class="option" onclick="toggleOption('Gluten-Free', 'selectedDietPlans', 'selectedDietPlansInput')">Gluten-Free</div>
+                    </div>
+                </div>
+                <input type="hidden" id="selectedDietPlansInput" name="diet-plans">
+            </div>
 
-            <label for="editPhoneNumber">Phone Number:</label>
-            <input type="text" id="editPhoneNumber" name="editPhoneNumber">
+            <div class="form-group custom-dropdown">
+                <label for="meal-plans">Meal Plans (Select multiple):</label>
+                <div class="dropdown">
+                    <div class="selected-options" onclick="toggleDropdown('mealPlans')">
+                        <span id="selectedMealPlans"></span>
+                        <i class="fas fa-caret-down"></i>
+                    </div>
+                    <div class="options" id="mealPlansOptions">
+                        <div class="option" onclick="toggleOption('Breakfast', 'selectedMealPlans', 'selectedMealPlansInput')">Breakfast</div>
+                        <div class="option" onclick="toggleOption('Lunch', 'selectedMealPlans', 'selectedMealPlansInput')">Lunch</div>
+                        <div class="option" onclick="toggleOption('Brunch', 'selectedMealPlans', 'selectedMealPlansInput')">Brunch</div>
+                        <div class="option" onclick="toggleOption('Snacks', 'selectedMealPlans', 'selectedMealPlansInput')">Snacks</div>
+                        <div class="option" onclick="toggleOption('Dinner', 'selectedMealPlans', 'selectedMealPlansInput')">Dinner</div>
+                    </div>
+                </div>
+                <input type="hidden" id="selectedMealPlansInput" name="meal-plans">
+            </div>
 
-            <label for="editDietaryPreferences">Dietary Preferences:</label>
-            <select id="editDietaryPreferences" name="editDietaryPreferences" multiple>
-                <option value="vegetarian">Vegetarian</option>
-                <option value="gluten-free">Gluten-Free</option>
-                <!-- Add more options as needed -->
-            </select>
-
-            <label for="editMealPreferences">Meal Preferences:</label>
-            <select id="editMealPreferences" name="editMealPreferences" multiple>
-                <option value="breakfast">Breakfast</option>
-                <option value="lunch">Lunch</option>
-                <!-- Add more options as needed -->
-            </select>
-
-            <button type="button" onclick="saveChanges()">Save Changes</button>
+            <button type="button" class="btn btn-success" onclick="saveChanges()">Save Changes</button>
         </form>
     </div>
+    
+    
 
     <script>
         // Function to fetch user data from the API
         async function fetchUserData() {
             try {
-                const userId = '9df3a0b1-75e4-4413-a08e-cae8069d3e6a'; // Replace with the actual user ID
+                const urlParams = new URLSearchParams(window.location.search);
+
+                // Retrieve the userId from the URL
+                const userId = urlParams.get('userId');
+                // If userId is not present, use the default value
+                const defaultUserId = '9df3a0b1-75e4-4413-a08e-cae8069d3e6a';
+                const finalUserId = userId || defaultUserId;
                 const response = await fetch('http://127.0.0.1:8000/api/user_profile/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ user_id: userId }),
+                    body: JSON.stringify({ user_id: finalUserId }),
                 });
 
                 const userData = await response.json();
@@ -282,43 +377,117 @@
         }
 
         // Function to fetch data for the favorite recipes section from the API
-        async function fetchFavoriteRecipes(userId) {
-            try {
-                // Modify the URL to include the userId
-                const userId = '9df3a0b1-75e4-4413-a08e-cae8069d3e6a'; // Replace with the actual user ID
-                const response = await fetch('http://127.0.0.1:8000/api/user/favorites/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ userId: userId }),
-                });
+        async function fetchFavoriteRecipes() {
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
 
-                const userData = await response.json();
-                console.log("user data", userData)
+        // Retrieve the userId from the URL
+        const userId = urlParams.get('userId');
+        // If userId is not present, use the default value
+        const defaultUserId = '9df3a0b1-75e4-4413-a08e-cae8069d3e6a';
+        const finalUserId = userId || defaultUserId;
 
-                const { favorites } = responseData;
+
+        const response = await fetch('http://127.0.0.1:8000/api/user_profile/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user_id: finalUserId }),
+        });
+
+        const userData = await response.json();
+
+        const { favorites } = userData;
+
+        // Update favorite recipes section with fetched data
+        const favoriteList = document.getElementById('favoriteList');
+        favoriteList.innerHTML = ''; // Clear existing list
+
+        if (favorites && favorites.length > 0) {
+            favorites.slice(0, 5).forEach(recipe => {
+                console.log("recipe.........\n\n", recipe);
+                const listItem = document.createElement('li');
+                listItem.classList.add('favorite-list-item');
+                const recipeLink = document.createElement('a');
+                recipeLink.textContent = recipe;
                 
+                // Replace 'recipe-details.html' with the actual link you want to redirect to
+                recipeLink.href = `recipe-details.html?recipeId=${recipe.recipeId}`;
 
-                // Update favorite recipes section with fetched data
-                const favoriteList = document.getElementById('favoriteList');
-                favorites.slice(0, 5).forEach(recipe => {
-                    console.log("recipe.........\n\n", recipe)
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('favorite-list-item');
-                    listItem.textContent = recipe.dishName;
-                    favoriteList.appendChild(listItem);
-                });
-            } catch (error) {
-                console.error('Error fetching favorite recipes:', error);
-            }
+                listItem.appendChild(recipeLink);
+                favoriteList.appendChild(listItem);
+            });
+        } else {
+            const listItem = document.createElement('li');
+            listItem.classList.add('favorite-list-item');
+            listItem.textContent = 'User has not made any recipe favorite';
+            favoriteList.appendChild(listItem);
         }
+    } catch (error) {
+        console.error('Error fetching favorite recipes:', error);
+    }
+}
 
         // Fetch user data and favorite recipes when the page loads
         window.onload = function () {
             fetchUserData();
-            fetchFavoriteRecipes('9df3a0b1-75e4-4413-a08e-cae8069d3e6a');
+            fetchFavoriteRecipes();
         };
+
+
+
+        function toggleDropdown(dropdownId) {
+    const options = document.getElementById(dropdownId + 'Options');
+    options.style.display = options.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleOption(option, selectedOptionsId, selectedOptionsInputId, placeholder) {
+    const selectedOptionsSpan = document.getElementById(selectedOptionsId);
+    const selectedInput = document.getElementById(selectedOptionsInputId);
+    const options = document.getElementById(selectedOptionsId + 'Options');
+
+    // Check if the option is the placeholder
+    if (option === placeholder) {
+        // Handle the placeholder case (you can customize this part)
+        selectedOptionsSpan.innerText = `Select ${selectedOptionsId}`;
+        selectedOptionsSpan.style.color = 'gray'; // Change text color for placeholder
+        selectedInput.value = ''; // Clear the input value
+    } else {
+        if (!selectedOptionsSpan.innerText.includes(option)) {
+            if (selectedOptionsSpan.innerText.trim() === placeholder) {
+                // If the current value is the placeholder, replace it
+                selectedOptionsSpan.innerText = option;
+            } else {
+                // Concatenate options with a comma
+                selectedOptionsSpan.innerText += `, ${option}`;
+            }
+        }
+
+        const selectedOptions = selectedOptionsSpan.innerText; // No need to remove trailing comma
+        selectedInput.value = selectedOptions;
+
+        // Remove the placeholder if any option is selected
+        if (selectedOptions !== placeholder) {
+            selectedOptionsSpan.style.color = '#333'; // Change text color to default
+        }
+    }
+
+    options.style.display = 'none';
+}
+
+
+// Add a function to close the dropdown when clicking outside the options
+document.addEventListener('click', function (event) {
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(function (dropdown) {
+        if (!dropdown.contains(event.target)) {
+            dropdown.querySelector('.options').style.display = 'none';
+        }
+    });
+});
+
+
 
         function toggleEditForm() {
         // Toggle visibility of the edit form
@@ -343,16 +512,44 @@
     }
 
     function saveChanges() {
-        // Implement the logic to save changes to the server here
-        // You can retrieve the edited values from the edit form fields
-        // and send them to the server using an appropriate API request.
-        // Once the changes are saved, update the displayed user data.
-        alert('Changes saved successfully!');
-        
-        // Close the edit form and go back to the previous page (for demo purposes, it's just hiding the form)
-        const editForm = document.getElementById('editForm');
-        editForm.style.display = 'none';
-    }
+    // Retrieve values from the form
+    const newPhoneNumber = document.getElementById('phone').value;
+    const newDietaryPreferences = Array.from(document.getElementById('selectedDietPlansInput').value.split(','));
+    const newMealPreferences = Array.from(document.getElementById('selectedMealPlansInput').value.split(','));
+
+    // Call the API to save changes
+    const userId = '9df3a0b1-75e4-4413-a08e-cae8069d3e6a'; // Replace with the actual user ID
+    fetch('http://127.0.0.1:8000/api/update_user/', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user_id: userId,
+            phone_number: newPhoneNumber,
+            dietary_preferences: newDietaryPreferences,
+            meal_preferences: newMealPreferences,
+        }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Changes saved successfully:', data);
+
+            // Update the displayed user data
+            document.getElementById('phoneNumber').innerText = newPhoneNumber;
+            document.getElementById('dietaryPreferences').innerText = newDietaryPreferences.join(', ');
+            document.getElementById('mealPreferences').innerText = newMealPreferences.join(', ');
+
+            // Close the edit form
+            document.getElementById('editForm').style.display = 'none';
+        })
+        .catch(error => {
+            console.error('Error saving changes:', error);
+            alert('Error saving changes. Please try again.');
+        });
+}
+
+
     </script>
 </body>
 

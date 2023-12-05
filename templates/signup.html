@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Sign Up</h1>
+
+        <!-- Sign Up Form -->
+        <form id="signUpForm">
+            {% csrf_token %}
+            <div id="errorMessage" class="error-message"></div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone_number">Phone Number:</label>
+            <input type="tel" id="phone_number" name="phone_number" required>
+
+            <label for="dietary_preferences">Dietary Preferences:</label>
+            <select id="dietary_preferences" name="dietary_preferences[]" multiple>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="gluten_free">Gluten-Free</option>
+            </select>
+
+            <label for="meal_preferences">Meal Preferences:</label>
+            <select id="meal_preferences" name="meal_preferences[]" multiple>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+            </select>
+
+            <button type="button" onclick="submitSignUpForm()">Sign Up</button>
+        </form>
+    </div>
+
+    <script>
+        function submitSignUpForm() {
+            const errorMessageElement = document.getElementById('errorMessage');
+            // Gather form data
+            const formData = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value,
+                email: document.getElementById('email').value,
+                phone_number: document.getElementById('phone_number').value,
+                dietary_preferences: Array.from(document.getElementById('dietary_preferences').selectedOptions).map(option => option.value),
+                meal_preferences: Array.from(document.getElementById('meal_preferences').selectedOptions).map(option => option.value),
+            };
+
+            // Make AJAX request
+            fetch('/user/signup/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token in headers
+                },
+                body: JSON.stringify(formData),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    user_id = response.user_id
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Signup successful:', data);
+
+                    // Log the entire data object to the console
+                    console.log(data);
+
+                    // Retrieve userId from the response data
+                    var userId = data.userId;
+
+                    // Redirect to profile page with the userId in the URL
+                    window.location.href = '/user_page?userId=' + userId;
+                })
+                .catch(error => {
+                    console.error('Error during signup:', error);
+                    errorMessageElement.textContent = error;
+                    // Handle error (e.g., display an error message)
+                });
+        }
+
+        // Function to get CSRF token from cookie
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+    </script>
+</body>
+
+
+</html>

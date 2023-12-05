@@ -57,6 +57,14 @@ def user_page(request):
     return render(request,'user_page.html')
 def analytics(request):
     return render(request,'analytics.html')
+def login(request):
+    return render(request,'login.html')
+def signup(request):
+    return render(request,'signup.html')
+def adminportal(request):
+    return render(request,'adminportal.html')
+def adminprofile(request):
+    return render(request,'adminprofile.html')
 
 @method_decorator(csrf_exempt, name='dispatch')
 class UserView(View):
@@ -64,15 +72,14 @@ class UserView(View):
       
         # data = json.loads(request.body.decode('utf-8'))
         # print("data",data)
+      
         data = json.loads(request.body.decode('utf-8'))
         user_id = data.get('user_id')
-
+        print("userId.................", user_id)
         if not user_id:
             return JsonResponse({'error': 'User ID not provided'}, status=400)
 
         user = get_object_or_404(User, userId=user_id)
-
-        print("user.......\n\n", user)
 
         user_details = {
             'userId': user.userId,
@@ -98,9 +105,9 @@ class SignupView(View):
         password = data.get('password')
         email = data.get('email')
         phone_number = data.get('phone_number')
-        dietary_preferences = data.get('dietary_preferences', [])
-        meal_preferences = data.get('meal_preferences', [])
-        favorites = data.get('favorites', [])
+        dietary_preferences = data.get('dietary_preferences', "-")
+        meal_preferences = data.get('meal_preferences', "-")
+        # favorites = data.get('favorites', [])
 
         if not username or not password or not email:
             return self.json_response({'error': 'Username, password, and email are required'}, status=400)
@@ -119,14 +126,14 @@ class SignupView(View):
             password=hashed_password,
             email=email,
             phone_number=phone_number,
-            dietary_preferences=dietary_preferences,
-            meal_preferences=meal_preferences,
-            favorites=favorites
+            dietary_preferences= dietary_preferences,
+            meal_preferences= meal_preferences,
+            # favorites= favorites
         )
 
         new_user.save()
 
-        return self.json_response({'message': 'User created successfully'}, status=201)
+        return self.json_response({'message': 'User created successfully', 'userId': user_id}, status=201)
 
     def json_response(self, data, status=200):
         return JsonResponse(data, status=status)
@@ -147,7 +154,8 @@ class LoginView(View):
         user = User.objects.filter(username=username).first()
 
         if user and check_password(password, user.password):
-            return self.json_response({'message': 'Login successful'}, status=200)
+            print("user admin", user.isadmin)
+            return self.json_response({'message': 'Login successful', 'userId' : user.userId, 'isadmin': user.isadmin if hasattr(user, 'isadmin') else False}, status=200)
         else:
             return self.json_response({'error': 'Invalid username or password'}, status=401)
     def json_response(self, data, status=200):
@@ -166,8 +174,6 @@ class UpdateUserView(View):
         data = json.loads(request.body.decode('utf-8'))
 
         user_id = data.get('userId')
-
-        print("user_id", user_id)
 
         if not user_id:
             return JsonResponse({'error': 'Provide userId for updating'}, status=400)
@@ -342,14 +348,13 @@ class GetUserFavoritesView(View):
         if not user:
             return JsonResponse({'error': 'User not found'}, status=404)
 
-        if user:
-            favorites = user.favorites
+        favorites = user.favorites  # Assuming 'favorites' is a related field, use '.all()' to get all related objects
 
-            if favorites:
-                return JsonResponse({"fav":favorites})
-                # return JsonResponse({'favorites': favorites}, status=200)
-            else:
-                return JsonResponse({'message': 'User has not made any recipe favorite'}, status=200)@method_decorator(csrf_exempt, name='dispatch')
+        if favorites:
+            return JsonResponse({'favorites': favorites}, status=200)
+        else:
+            return JsonResponse({'message': 'User has not made any recipe favorite'}, status=200)
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class GetRecipeView(View):
@@ -419,21 +424,28 @@ class GenerateChatResponseView(View):
 
         api_key = ''
 
-        conversation = data.get('conversation', [])
+        # conversation = data.get('conversation', [])
 
-        existing_history = self.fetch_history(user_id)
+ 
+        question = data.get('question')
+
+        print("question.............", question)
+
+        self.save_history(question)
+
+        existing_history = self.fetch_history()
 
         print("exisitng history........\n\n", existing_history)
 
-        response = self.openai_chat_request(conversation, api_key)
+        response = self.openai_chat_request(question, api_key, existing_history)
 
         assistant_reply = response['choices'][0]['message']['content']
 
-        self.save_history(user_id, assistant_reply)
+        self.save_history(assistant_reply)
 
-        return JsonResponse({'assistant_reply': assistant_reply})
+        return JsonResponse({'response': assistant_reply})
 
-    def openai_chat_request(self, conversation, api_key):
+    def openai_chat_request(self, conversation, api_key, previous_conv):
         api_url = 'https://api.openai.com/v1/chat/completions'
 
         headers = {
@@ -443,13 +455,15 @@ class GenerateChatResponseView(View):
 
         messages =[]
 
-        messages.append({"role": "system", "content" :"You are a helpful assistant specializing in providing personalized cooking recipes. The user will provide specific ingredients along with their dietary preferences and meal preferences. Based on this information, you are tasked with recommending delicious recipes tailored to the user's preferences. For example, the user might say: What's a healthy recipe for dinner with chicken, broccoli, and quinoa? I prefer gluten-free options. Your responses should take into account the provided ingredients, the user's dietary preferences (such as gluten-free), and their meal preferences (e.g., dinner). Feel free to ask for clarification or additional details to ensure the recipes align perfectly with the user's needs." })
+        messages.append({"role": "system", "content" :"You are a helpful assistant specializing in providing personalized cooking recipes. The user will provide specific ingredients along with their dietary preferences and meal preferences. Based on this information, you are tasked with recommending delicious recipes tailored to the user's preferences. For example, the user might say: What's a healthy recipe for dinner with chicken, broccoli, and quinoa? I prefer gluten-free options. Your responses should take into account the provided ingredients, the user's dietary preferences (such as gluten-free), and their meal preferences (e.g., dinner). Feel free to ask for clarification or additional details to ensure the recipes align perfectly with the user's needs. I will attach previous conversation as well." })
 
+        # messages.append({"role": "system", "content": })
+        for i in previous_conv:
+            messages.append(i)
 
-        for conv in conversation:
-            messages.append(conv)
+        # messages.append({"role": "user", "content": conversation})
 
-
+        print("messages..................\n\n", messages)
         data = {
             'messages': messages,
             'model':'gpt-3.5-turbo-16k-0613'
@@ -457,17 +471,22 @@ class GenerateChatResponseView(View):
 
         response = requests.post(api_url, headers=headers, json=data)
 
-        # print("response from openAI", response.status_code, response.json())
+        print("response from openAI", response.status_code, response.json())
 
         return response.json()
-    def fetch_history(self, user_id):
-        # Fetch existing conversation history for the user
-        existing_conversation, created = Conversation.objects.get_or_create(userId=user_id)
-        print("exisiting conversation messages...........\n", existing_conversation)
-        return existing_conversation.messages
     
-    def save_history(self, user_id, updated_history):
-        # Save the updated conversation history
-        Conversation.objects.filter(userId=user_id).update(
-            messages=Concat(F('messages'), Value([updated_history]), output_field=models.JSONField())
-        )
+    def fetch_history(self):
+        # Fetch all conversation history
+        all_conversations = Conversation.objects.all()
+
+        # Format messages alternatively
+        formatted_messages = []
+        for i, conversation in enumerate(all_conversations):
+            role = 'user' if i % 2 == 0 else 'assistant'
+            formatted_messages.append({'role': role, 'content': conversation.messages})
+
+        return formatted_messages
+
+    def save_history(self, new_message):
+        # Create a new document for each message
+        Conversation.objects.create(messages=new_message)

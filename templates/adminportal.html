@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Management</title>t
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #033603;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Recipe Management</h1>
+
+        <!-- Add Recipe Form -->
+        <form id="addRecipeForm">
+            <label for="dishName">Dish Name:</label>
+            <input type="text" id="dishName" name="dishName" required>
+        
+            <label for="ingredients">Ingredients:</label>
+            <textarea id="ingredients" name="ingredients" rows="4" required></textarea>
+        
+            <label for="steps">Steps:</label>
+            <textarea id="steps" name="steps" rows="4" required></textarea>
+        
+            <!-- Admin ID Field -->
+            <input type="text" id="adminId" name="adminId" placeholder="Admin ID" required>
+        
+            <button type="button" onclick="submitForm()">Add Recipe</button>
+        </form>
+
+        <!-- Delete Recipe Form -->
+        <form id="deleteRecipeForm" action="/delete_recipe" method="post">
+            <label for="deleteDishName">Dish Name to Delete:</label>
+            <input type="text" id="deleteDishName" name="deleteDishName" required>
+
+            <button type="submit">Delete Recipe</button>
+        </form>
+
+        <!-- Update Recipe Form -->
+        <form id="updateRecipeForm" action="/update_recipe" method="post">
+            <label for="updateDishName">Dish Name to Update:</label>
+            <input type="text" id="updateDishName" name="updateDishName" required>
+
+            <label for="updateIngredients">New Ingredients:</label>
+            <textarea id="updateIngredients" name="updateIngredients" rows="4" required></textarea>
+
+            <label for="updateSteps">New Steps:</label>
+            <textarea id="updateSteps" name="updateSteps" rows="4" required></textarea>
+
+            <button type="submit">Update Recipe</button>
+        </form>
+    </div>
+
+    <script>
+        function submitForm() {
+    // Get the CSRF token from the form
+                // const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+
+                fetch('http://127.0.0.1:8000/admin/upload_recipe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // 'X-CSRFToken': csrfToken,  // Include CSRF token in headers
+                    },
+                    body: JSON.stringify({
+                        dishName: document.getElementById('dishName').value,
+                        ingredients: document.getElementById('ingredients').value,
+                        steps: document.getElementById('steps').value,
+                        adminId: document.getElementById('adminId').value,
+                    }),
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // If the response is successful, display a success message
+                            return response.json();
+                        } else {
+                            // If the response is not successful, handle the error
+                            console.error('Recipe upload failed');
+                            throw new Error('Recipe upload failed');
+                        }
+                    })
+                    .then(data => {
+                        // Display success message in a pop-up
+                        alert(data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error during recipe upload:', error);
+                        // Handle other errors (e.g., display an error message)
+                        alert('Error during recipe upload. Please try again later.');
+                    });
+            }
+
+    </script>
+</body>
+
+</html>
