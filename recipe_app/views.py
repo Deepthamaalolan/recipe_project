@@ -31,7 +31,7 @@ from django.shortcuts import HttpResponse, render
 # Create your views here.
 def home(request):
     context = {'name': 'Web Weavers', 'course' : 'Web Systems'} 
-    return render(request,'home3.html',context)
+    return render(request,'home.html',context)
 def about(request):
     return render(request,'about.html')
 #def projects(request):
@@ -64,7 +64,13 @@ def signup(request):
 def adminportal(request):
     return render(request,'adminportal.html')
 def adminprofile(request):
-    return render(request,'adminprofile.html')
+    return render(request,'admindashboard.html')
+def adminlogin(request):
+    return render(request,'adminlogin.html')
+def recipe_board(request):
+    return render(request,'recipe.html')
+def popular_recipe(request):
+    return render(request,'popularrec.html')
 
 @method_decorator(csrf_exempt, name='dispatch')
 class UserView(View):
@@ -112,10 +118,10 @@ class SignupView(View):
         if not username or not password or not email:
             return self.json_response({'error': 'Username, password, and email are required'}, status=400)
 
-        # Use get() to check for existing user
-        existing_user = User.objects.filter(username=username).first() or User.objects.filter(email=email).first()
-        if existing_user:
-            return self.json_response({'error': 'Username or email already exists'}, status=400)
+        # # Use get() to check for existing user
+        # existing_user = User.objects.filter(username=username).first() or User.objects.filter(email=email).first()
+        # if existing_user:
+        #     return self.json_response({'error': 'Username or email already exists'}, status=400)
 
         hashed_password = make_password(password)
         user_id = str(uuid.uuid4())
@@ -173,19 +179,21 @@ class UpdateUserView(View):
     def put(self, request):
         data = json.loads(request.body.decode('utf-8'))
 
-        user_id = data.get('userId')
+        # user_id = data.get('userId')
 
+        print("Dataaa", data)
+        user_id = "9df3a0b1-75e4-4413-a08e-cae8069d3e6abbbb"
         if not user_id:
             return JsonResponse({'error': 'Provide userId for updating'}, status=400)
         
-        existing_user = User.objects.filter(userId=str(user_id)).first()
+        existing_user = User.objects.filter(userId=user_id).first()
         if not existing_user:
             return JsonResponse({'error': 'User not found'}, status=404)
 
-        excluded_fields = ['username', 'userId', 'email']
-        update_data = {key: value for key, value in data.items() if key not in excluded_fields}
+        # excluded_fields = ['username', 'userId', 'email']
+        # update_data = {key: value for key, value in data.items() if key not in excluded_fields}
 
-        User.objects.filter(userId=str(user_id)).update(**update_data)
+        # User.objects.filter(userId=user_id).update(**update_data)
 
         return JsonResponse({'message': 'User information updated successfully'}, status=200)
     
@@ -204,12 +212,12 @@ class SignupViewAdmin(View):
 
         all_admins = Admin.objects.all()
 
-        for user in all_admins:
-            print(f'Username: {user.username}, Email: {user.email}')
+        # for user in all_admins:
+        #     print(f'Username: {user.username}, Email: {user.email}')
 
-        existing_user = Admin.objects.filter(username=username) or Admin.objects.filter(email=email)
-        if existing_user:
-            return self.json_response({'error': 'Admin Username or email already exists'}, status=400)
+        # existing_user = Admin.objects.filter(username=username) or Admin.objects.filter(email=email)
+        # if existing_user:
+        #     return self.json_response({'error': 'Admin Username or email already exists'}, status=400)
 
         hashed_password = make_password(password)
         admin_id = str(uuid.uuid4())
@@ -422,7 +430,7 @@ class GenerateChatResponseView(View):
 
         user_id = data.get('userId')
 
-        api_key = ''
+        api_key = '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'
 
         # conversation = data.get('conversation', [])
 

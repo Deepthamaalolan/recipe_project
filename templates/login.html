@@ -166,7 +166,7 @@
             </div>
             <div id="errorMessage" class="error-message"></div>
             <input type="submit" value="Sign in" />
-            <div class="info">New on our platform? <a href="signup.html">Create an account</a></div>
+            <div class="info">New on our platform? <a href="/signup">Create an account</a></div>
         </form>
       </div>
     </div>
@@ -216,6 +216,7 @@
             .then((data) => {
               console.log("Login successful:", data);
 
+              localStorage.setItem('token', "123456789");
               // Log the entire data object to the console
 
               // Retrieve userId from the response data

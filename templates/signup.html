@@ -167,7 +167,7 @@
             </select>
             <div id="errorMessage" class="error-message"></div>
             <button type="button" onclick="submitSignUpForm()">Sign Up</button>
-            <div class="info">Already have an account? <a href="login.html">Click here</a></div>
+            <div class="info">Already have an account? <a href="/login.html">Click here</a></div>
         </form>
         </div>
       </div>
@@ -204,6 +204,8 @@
                 .then(data => {
                     console.log('Signup successful:', data);
 
+                    localStorage.setItem('token', "123456789");
+
                     // Log the entire data object to the console
                     console.log(data);
 
@@ -211,7 +213,7 @@
                     var userId = data.userId;
 
                     // Redirect to profile page with the userId in the URL
-                    window.location.href = '/user_page?userId=' + userId;
+                    window.location.href = '/user_page?userId=' + "b54bfc9a-ae06-4e81-9b9e-43b4df6cbc27";
                 })
                 .catch(error => {
                     console.error('Error during signup:', error);

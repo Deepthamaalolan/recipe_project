@@ -2,7 +2,7 @@
 from django.urls import path
 
 from recipe_app import views
-from .views import SignupView, LoginView, UpdateUserView, SignupViewAdmin, LoginViewAdmin, UpdateAdminView, UploadRecipeView, UpdateRecipeView,GetUserFavoritesView, SaveRecipeView, GenerateChatResponseView, home, about, contact, view_recipe, user_page, analytics, UserView, GetRecipeView, login , signup, adminportal, adminprofile
+from .views import SignupView, LoginView, UpdateUserView, SignupViewAdmin, LoginViewAdmin, UpdateAdminView, UploadRecipeView, UpdateRecipeView,GetUserFavoritesView, SaveRecipeView, GenerateChatResponseView, home, about, contact, view_recipe, user_page, analytics, UserView, GetRecipeView, login , signup, adminportal, adminprofile, adminlogin, recipe_board, popular_recipe
 urlpatterns = [
     path('user/signup/', SignupView.as_view(), name='signup'),
     path('user/login/', LoginView.as_view(), name='login'),
@@ -26,6 +26,8 @@ urlpatterns = [
     path('analytics/', analytics, name='analytics'),
     path('login.html/', login, name='login_website'),
     path('signup/', signup, name='signup_website'),
-    path('admin_portal/', adminportal, name = "admin_portal"),
-    path('admin_profile/', adminprofile, name = "admin_profile")
+    path('admin_login/', adminlogin, name = "admin_login"),
+    path('admin_profile/', adminprofile, name = "admin_profile"),
+    path('recipe.html/', recipe_board, name = "recipe_profile"),
+    path('popularrec.html/', popular_recipe, name = "popular_recipe")
 ]

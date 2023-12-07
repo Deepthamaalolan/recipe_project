@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.3.67/css/materialdesignicons.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            width: 100vw;
+            background: url('https://source.unsplash.com/1600x900/?food') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .admin-signin {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            width: 60%; /* Adjust the width */
+            max-width: 600px; /* Set a maximum width */
+        }
+
+        .admin-signin h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 10px 10px 35px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #bf552a;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #bf552a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #a44620;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="admin-signin">
+            <form id="adminLoginForm" method="post" action="{% url 'admin_login' %}">
+                <h2>Admin Sign In</h2>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="username" id="usernameInput" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" id="passwordInput" placeholder="Password" required>
+                    <span id="reveal-password" class="mdi mdi-eye-off-outline"></span>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // JavaScript code for the password reveal button
+        document.addEventListener("DOMContentLoaded", function () {
+            const revealPassword = document.getElementById("reveal-password");
+            revealPassword.addEventListener("click", function () {
+                const passwordInput = document.getElementById("passwordInput");
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    revealPassword.classList.remove("mdi-eye-off-outline");
+                    revealPassword.classList.add("mdi-eye-outline");
+                } else {
+                    passwordInput.type = "password";
+                    revealPassword.classList.remove("mdi-eye-outline");
+                    revealPassword.classList.add("mdi-eye-off-outline");
+                }
+            });
+        });
+
+        const loginForm = document.getElementById("adminLoginForm");
+
+        loginForm.addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent the default form submission
+
+          const username = document.getElementById("usernameInput").value;
+          const password = document.getElementById("passwordInput").value;
+          const errorMessageElement = document.getElementById("errorMessage");
+
+          // Call the API to check credentials
+          fetch("http://127.0.0.1:8000/user/login/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: username,
+              password: password,
+            }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              user_id = response.user_id;
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Login successful:", data);
+
+              localStorage.setItem('token', "123456789");
+              // Log the entire data object to the console
+
+              // Retrieve userId from the response data
+              var userId = data.userId;
+
+              if (data.isadmin) {
+                window.location.href = "/admin_profile";
+              } else {
+                // Redirect to profile page with the userId in the URL
+                window.location.href = "/user_page?userId=" + userId;
+              }
+            })
+            .catch((error) => {
+              console.error("Error during signup:", error);
+              errorMessageElement.textContent = error;
+              // Handle error (e.g., display an error message)
+            });
+        });
+    </script>
+</body>
+</html>
