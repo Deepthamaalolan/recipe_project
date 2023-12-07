@@ -87,6 +87,8 @@ DATABASES = {
         'NAME': 'Recipe',
         'CLIENT': {
             'host': 'mongodb+srv://dt375:KYZwzc2j2CimVpMY@recipechatbot.rux4sap.mongodb.net/',
+            'ssl': True,
+            'ssl_cert_reqs': 'CERT_NONE',  # Disable certificate verification (not recommended for production)
         },
     }
 }
