@@ -31,7 +31,7 @@ from django.shortcuts import HttpResponse, render
 # Create your views here.
 def home(request):
     context = {'name': 'Web Weavers', 'course' : 'Web Systems'} 
-    return render(request,'home.html',context)
+    return render(request,'home3.html',context)
 def about(request):
     return render(request,'about.html')
 #def projects(request):

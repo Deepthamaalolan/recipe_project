@@ -1,25 +1,97 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>About Us</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.3.67/css/materialdesignicons.min.css" />
     <style>
-        body {
-            background-color: #f8f9fa;
-            color: #495057;
-        }
+      * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
 
-        .navbar {
-            background-color: #343a40;
-        }
+      html,
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #fffdf1;
+        height: 100%;
+      }
 
-        .navbar-brand, .navbar-nav .nav-link {
-            color: #fff;
-        }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
 
-        .welcome-section {
+      .navbar {
+        margin: 16px 32px;
+        border: 3px solid #b4b1ad;
+        border-left: none;
+        border-right: none;
+      }
+
+      .navbar-brand {
+        color: #052411;
+        font-size: 20px;
+        font-weight: 600;
+        font-style: italic;
+      }
+
+      .navbar-brand span {
+        color: #fd4a15;
+      }
+
+      .navbar-nav {
+        margin-left: auto;
+      }
+
+      .nav-item {
+        border-right: 2px solid #e9e6db;
+      }
+
+      .nav-item:last-child {
+        border-right: none;
+      }
+
+      @media screen and (max-width: 991px) {
+        .nav-item {
+            border: none;
+        }
+      }
+
+      .nav-item .nav-link {
+        color: #696662;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 0 32px !important;
+      }
+
+      @media screen and (max-width: 991px) {
+        .nav-item .nav-link {
+        padding: 8px 0px !important;
+      }
+      }
+
+      .nav-item .active,
+      .nav-item .nav-link:hover {
+        color: #ff4f18 !important;
+      }
+
+      .container {
+        padding: 0 32px;
+    }
+
+    .welcome-section {
             margin-top: 30px;
             text-align: center;
         }
@@ -52,38 +124,62 @@
             margin-top: 30px;
             text-align: center;
         }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Recipe Wiz</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/view_recipe">Recipes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user_page">Profile</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <div class="container">
+      footer {
+        background-color: #b19b8e;
+        padding: 16px 32px;
+        font-size: 14px;
+        color: #fff;
+        margin-top: auto;
+        font-weight: 600;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid p-0">
+          <a class="navbar-brand" href="/">Recipe Wiz<span>.</span></a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="./home3.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="./about.html">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./contact.html">Contact</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./view_recipe.html">Recipes</a>
+              </li>
+            </ul>
+            <ul class="navbar-nav mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link" href="./login.html">Login</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./signup.html">Signup</a>
+                </li>
+              </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container">
         <div class="welcome-section">
             <h2 class="my-3">Welcome to RecipeWiz!</h2>
             <p>Discover a world of flavors tailored to your ingredients. Whether you're a culinary whiz or just starting, RecipeWiz is your guide to tasty creations.</p>
@@ -118,7 +214,11 @@
             </div>
         </div>
     </div>
+  
+    <footer>&copy; Recipe Wiz 2023</footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  </body>
 </html>
