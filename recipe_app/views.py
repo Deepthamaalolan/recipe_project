@@ -430,7 +430,7 @@ class GenerateChatResponseView(View):
 
         user_id = data.get('userId')
 
-        api_key = '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'
+        api_key = ''
 
         # conversation = data.get('conversation', [])
 

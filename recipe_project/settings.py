@@ -86,7 +86,7 @@ DATABASES = {
         'ENFORCE_SCHEMA': False,  # Optional: Set to False if you want to disable schema enforcement
         'NAME': 'Recipe',
         'CLIENT': {
-            'host': 'mongodb+srv://dt375:KYZwzc2j2CimVpMY@recipechatbot.rux4sap.mongodb.net/',
+            'host': '',
         },
     }
 }
