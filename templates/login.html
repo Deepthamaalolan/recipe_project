@@ -1,132 +1,240 @@
 <!-- myapp/templates/login.html -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.3.67/css/materialdesignicons.min.css" />
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+      * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
 
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 300px;
-            width: 100%;
-        }
+      html,
+      body {
+        font-family: "Poppins", sans-serif;
+        height: 100vh;
+        width: 100vw;
+      }
 
-        h2 {
-            text-align: center;
-            color: #333;
-        }
+      .container {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(to right, #faf9f0 75%, #b19b8e 25%);
+      }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
+      .banner {
+        width: 60%;
+      }
 
-        input[type="submit"] {
-            background-color: #4caf50;
-            color: #fff;
-            cursor: pointer;
-        }
+      h1 {
+        width: 90%;
+        color: #254231;
+        font-size: 55px;
+        font-weight: 400;
+        margin: 0 auto;
+      }
 
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
+      h1 span {
+        font-weight: 600;
+      }
 
-        p {
-            color: #f00;
-            text-align: center;
-            margin-top: 10px;
-        }
+      .signin {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40%;
+        height: 100%;
+      }
 
-        .error-message {
-            color: #f00;
-            text-align: center;
-            margin-top: 10px;
-        }
+      form {
+        background-color: #fff;
+        padding: 43px 32px;
+        border-radius: 6px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 450px;
+        width: 100%;
+        height: fit-content;
+      }
+
+      h2, h3 {
+        color: #96989d;
+        font-size: 24px;
+      }
+
+      h3 {
+        font-size: 14px;
+        font-weight: 400;
+        margin: 4px 0 18px;
+      }
+
+      label {
+        display: inline-block;
+        color: #96989d;
+        font-size: 14px;
+        font-weight: 500;
+        margin: 12px 0 4px;
+      }
+
+      .input-container {
+        height: 32px;
+        display: flex;
+        align-items: center;
+        padding: 4px 8px;
+        border: 1px solid #e4e4e6;
+        border-radius: 6px;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        font-size: 14px;
+        color: #1b1b5c;
+        width: 100%;
+        border: none;
+        outline: none;
+        background-color: transparent;
+      }
+
+      .mdi {
+        color: #546b8f;
+        font-size: 18px;
+      }
+
+      #reveal-password {
+        cursor: pointer;
+      }
+
+      .error-message {
+        font-size: 12px;
+        color: #f00;
+        text-align: center;
+        margin-top: 16px;
+      }
+
+      input[type="submit"] {
+        width: 100%;
+        background-color: #bf552a;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 16px;
+        
+      }
+
+      .info {
+        font-size: 12px;
+        color: #96989d;
+        margin-top: 16px;
+        text-align: right;
+      }
+
+      a { 
+        color: #bf552a;
+        text-decoration: none;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-    <form id="loginForm" method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        <h2>Login</h2>
-        <div id="errorMessage" class="error-message"></div>
-        <input type="text" name="username" id="usernameInput" placeholder="Username">
-        <input type="password" name="password" id="passwordInput" placeholder="Password">
-        <input type="submit" value="Login">
-    </form>
-
+  <body>
+    <div class="container">
+      <div class="banner">
+        <h1>More than <span>15,000 recepies</span> from around the world</h1>
+      </div>
+      <div class="signin">
+        <form id="loginForm" method="post" action="{% url 'login' %}">
+            <h2>Welcome to Recipe Wiz! 👋</h2>
+            <h3>Please sign into your account and start the adventure.</h3>
+            <label for="usernameInput">Username</label>
+            <div class="input-container">
+                <input type="text" name="username" id="usernameInput" placeholder="Enter your username" required />
+            </div>
+            <label for="passwordInput">Password</label>
+            <div class="input-container">
+                <input type="password" name="password" id="passwordInput" placeholder="Enter your password" required />
+                <span id="reveal-password" class="mdi mdi-eye-off-outline"></span>
+            </div>
+            <div id="errorMessage" class="error-message"></div>
+            <input type="submit" value="Sign in" />
+            <div class="info">New on our platform? <a href="signup.html">Create an account</a></div>
+        </form>
+      </div>
+    </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const loginForm = document.getElementById('loginForm');
+      document.addEventListener("DOMContentLoaded", function () {
+        const revealPassword = document.getElementById("reveal-password");
+        revealPassword.addEventListener("click", function () {
+          const passwordInput = document.getElementById("passwordInput");
+          if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            revealPassword.classList.remove("mdi-eye-off-outline");
+            revealPassword.classList.add("mdi-eye-outline");
+          } else {
+            passwordInput.type = "password";
+            revealPassword.classList.remove("mdi-eye-outline");
+            revealPassword.classList.add("mdi-eye-off-outline");
+          }
+        });
 
-            loginForm.addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent the default form submission
+        const loginForm = document.getElementById("loginForm");
 
-                const username = document.getElementById('usernameInput').value;
-                const password = document.getElementById('passwordInput').value;
-                const errorMessageElement = document.getElementById('errorMessage');
+        loginForm.addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent the default form submission
 
-                // Call the API to check credentials
-                fetch('http://127.0.0.1:8000/user/login/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        username: username,
-                        password: password,
-                    }),
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    user_id = response.user_id
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Login successful:', data);
+          const username = document.getElementById("usernameInput").value;
+          const password = document.getElementById("passwordInput").value;
+          const errorMessageElement = document.getElementById("errorMessage");
 
-                    // Log the entire data object to the console
+          // Call the API to check credentials
+          fetch("http://127.0.0.1:8000/user/login/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: username,
+              password: password,
+            }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              user_id = response.user_id;
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Login successful:", data);
 
-                    // Retrieve userId from the response data
-                    var userId = data.userId;
+              // Log the entire data object to the console
 
-                    if(data.isadmin){
-                        window.location.href="/admin_profile";
-                    }else{
+              // Retrieve userId from the response data
+              var userId = data.userId;
 
-                        // Redirect to profile page with the userId in the URL
-                        window.location.href = '/user_page?userId=' + userId;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error during signup:', error);
-                    errorMessageElement.textContent = error;
-                    // Handle error (e.g., display an error message)
-                });
+              if (data.isadmin) {
+                window.location.href = "/admin_profile";
+              } else {
+                // Redirect to profile page with the userId in the URL
+                window.location.href = "/user_page?userId=" + userId;
+              }
+            })
+            .catch((error) => {
+              console.error("Error during signup:", error);
+              errorMessageElement.textContent = error;
+              // Handle error (e.g., display an error message)
             });
         });
+      });
     </script>
-</body>
-
+  </body>
 </html>

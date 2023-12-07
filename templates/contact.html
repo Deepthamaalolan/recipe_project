@@ -1,19 +1,93 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact Us - Application Inquiry</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-<style>
-    html, body {
-        height: 100%;
-        margin: 0;
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.3.67/css/materialdesignicons.min.css" />
+    <style>
+      * {
+        box-sizing: border-box;
         padding: 0;
-        font-family: 'Arial', sans-serif;
-        background: #f4f4f4;
-    }
-    .container {
+        margin: 0;
+      }
+
+      html,
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #fffdf1;
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .navbar {
+        margin: 16px 32px;
+        border: 3px solid #b4b1ad;
+        border-left: none;
+        border-right: none;
+      }
+
+      .navbar-brand {
+        color: #052411;
+        font-size: 20px;
+        font-weight: 600;
+        font-style: italic;
+      }
+
+      .navbar-brand span {
+        color: #fd4a15;
+      }
+
+      .navbar-nav {
+        margin-left: auto;
+      }
+
+      .nav-item {
+        border-right: 2px solid #e9e6db;
+      }
+
+      .nav-item:last-child {
+        border-right: none;
+      }
+
+      @media screen and (max-width: 991px) {
+        .nav-item {
+            border: none;
+        }
+      }
+
+      .nav-item .nav-link {
+        color: #696662;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 0 32px !important;
+      }
+
+      @media screen and (max-width: 991px) {
+        .nav-item .nav-link {
+        padding: 8px 0px !important;
+      }
+      }
+
+      .nav-item .active,
+      .nav-item .nav-link:hover {
+        color: #ff4f18 !important;
+      }
+
+      .container {
         width: 100%;
         max-width: 600px;
         margin: auto;
@@ -22,13 +96,16 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
     }
+
     h1, h2 {
         color: #333;
         text-align: center;
     }
+
     form {
         margin-top: 20px;
     }
+
     input, select, textarea {
         width: calc(100% - 20px);
         padding: 10px;
@@ -38,70 +115,120 @@
         display: block;
         box-sizing: border-box;
     }
-    button {
-        background: #4CAF50; /* Green */
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        display: block;
+
+    input, textarea {
+        font-size: 14px;
+        color: #1b1b5c;
         width: 100%;
-        box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        background-color: transparent;
+        padding: 4px 8px;
+        border: 1px solid #e4e4e6;
+        border-radius: 6px;
+        margin-top: 24px;
+      }
+
+    textarea {
+        height: 100px;
     }
-    button:hover {
-        background: #45a049;
+
+    .send-msg {
+        width: 100%;
+        background-color: #bf552a;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
     }
+
     p {
         color: #666;
         text-align: center;
     }
+
     a {
         color: #5c6bc0;
     }
-</style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="/">Recipe Wiz</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+      footer {
+        background-color: #b19b8e;
+        padding: 16px 32px;
+        font-size: 14px;
+        color: #fff;
+        margin-top: auto;
+        font-weight: 600;
+      }
+
+      .privacy {
+        margin-top: 16px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid p-0">
+          <a class="navbar-brand" href="/">Recipe Wiz<span>.</span></a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav ml-auto mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" aria-current="page" href="./home3.html">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/about">About</a>
-              </li>
-              
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/contact">Contact</a>
-            </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/view_recipe">Recipes</a>
+                <a class="nav-link" href="./about.html">About</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/user_page">Profile</a>
+                <a class="nav-link active" href="./contact.html">Contact</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./view_recipe.html">Recipes</a>
               </li>
             </ul>
+            <ul class="navbar-nav mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link" href="./login.html">Login</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./signup.html">Signup</a>
+                </li>
+              </ul>
           </div>
         </div>
       </nav>
-<div class="container">
-    <h1>Contact Us</h1>
-    <h2>We're Here to Help</h2>
-    <p>If you have any questions or need assistance with our application, please reach out to us. Fill out the form below, and we will get back to you as soon as possible.</p>
-    <form action="your-server-side-handler" method="post">
-        <input type="text" name="name" placeholder="Your Name*" required>
-        <input type="email" name="email" placeholder="Your Email Address*" required>
-        <input type="text" name="subject" placeholder="Subject*" required>
-        <textarea name="message" placeholder="Please describe your issue or question.*" required></textarea>
-        <button type="submit">Send Message</button>
-    </form>
-    <p>Your privacy is important to us. Please read our <a href="your-privacy-policy-url">Privacy Policy</a>.</p>
-</div>
-</body>
+
+      <div class="container">
+        <h1>Contact Us</h1>
+        <h2>We're Here to Help</h2>
+        <p>If you have any questions or need assistance with our application, please reach out to us. Fill out the form below, and we will get back to you as soon as possible.</p>
+        <form action="your-server-side-handler" method="post">
+            <input type="text" name="name" placeholder="Your Name*" required>
+            <input type="email" name="email" placeholder="Your Email Address*" required>
+            <input type="text" name="subject" placeholder="Subject*" required>
+            <textarea name="message" placeholder="Please describe your issue or question.*" required></textarea>
+            <button class="send-msg" type="submit">Send Message</button>
+        </form>
+        <p class="privacy">Your privacy is important to us. Please read our <a href="your-privacy-policy-url">Privacy Policy</a>.</p>
+    </div>
+  
+    <footer>&copy; Recipe Wiz 2023</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  </body>
 </html>
